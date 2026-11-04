@@ -570,6 +570,95 @@
     letter-spacing: 0.03em;
     color: rgba(255,255,255,0.7);
   }
+
+  /* ---------- v2.0: modelo com θ, K, base e faixa ---------- */
+  :root {
+    --serie-1: #1E4B33;
+    --serie-2: #3E7CA6;
+    --serie-3: #9A5B1F;
+    --good: #2F6B45;
+    --good-soft: #E1EEE4;
+    --bad: #8A3B2E;
+    --bad-soft: #F3E3DF;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --serie-1: #6FBF94; --serie-2: #7FB5D9; --serie-3: #D9A15D;
+      --good: #7CC79A; --good-soft: #1E2E23; --bad: #E39A8A; --bad-soft: #352320;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --serie-1: #6FBF94; --serie-2: #7FB5D9; --serie-3: #D9A15D;
+    --good: #7CC79A; --good-soft: #1E2E23; --bad: #E39A8A; --bad-soft: #352320;
+    color-scheme: dark;
+  }
+
+  .reg-panel.reg-panel-wide { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .reg-panel .field { margin-bottom: 0; min-width: 0; }
+
+  select.mode-select {
+    width: 100%;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 8px 4px;
+    border: none;
+    border-bottom: 2px solid var(--line);
+    background: transparent;
+    color: var(--unifesp-green);
+    outline: none;
+    cursor: pointer;
+  }
+  select.mode-select:focus { border-bottom-color: var(--focus); }
+  select.mode-select option { color: var(--unifesp-green); background: var(--surface); }
+
+  .year-rates { font-size: 12.5px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .year-rates strong { color: var(--ink); }
+
+  .company-card h3 .profile { display: block; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 700; color: var(--ink-soft); margin-top: 2px; }
+  .company-card[data-n="1"] { border-top-color: var(--serie-1); }
+  .company-card[data-n="2"] { border-top-color: var(--serie-2); }
+  .company-card[data-n="3"] { border-top-color: var(--serie-3); }
+
+  .card-warn { font-size: 11.5px; color: var(--warn); background: var(--warn-soft); border-radius: 4px; padding: 6px 8px; margin-top: 6px; }
+
+  table.compare tr.group td {
+    background: var(--bg);
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-align: left;
+    padding: 8px 16px;
+  }
+  table.compare td.value.pos { color: var(--good); }
+  table.compare td.value.neg { color: var(--bad); }
+  table.compare tr.key td { border-top: 2px solid var(--line); }
+
+  .sens-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 900px) { .sens-grid { grid-template-columns: 1fr; } }
+  .sens-card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; min-width: 0; }
+  .sens-card h4 { font-family: 'EB Garamond', serif; font-size: 15px; font-weight: 600; margin: 0 0 10px; }
+  .sens-card table { width: 100%; border-collapse: collapse; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+  .sens-card th, .sens-card td { padding: 6px 4px; text-align: right; border-bottom: 1px solid var(--line); }
+  .sens-card th:first-child, .sens-card td:first-child { text-align: left; color: var(--ink-soft); font-weight: 700; }
+  .sens-card th { font-size: 11px; color: var(--ink-soft); font-weight: 700; }
+  .sens-card td.cell-hib { color: var(--hibrido); font-weight: 800; }
+  .sens-card td.cell-das { color: var(--tradicional); font-weight: 800; }
+  .sens-legend { font-size: 11.5px; color: var(--ink-soft); margin-top: 8px; }
+
+  .chart-box { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; overflow-x: auto; }
+  .chart-box svg { display: block; width: 100%; min-width: 520px; height: auto; }
+  .chart-box svg text { font-family: 'Nunito', sans-serif; font-size: 11px; fill: var(--ink-soft); }
+  .chart-legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12.5px; margin-top: 8px; }
+  .chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .chart-legend i { display: inline-block; width: 18px; height: 3px; border-radius: 2px; }
+
+  .note-box ol { margin: 8px 0 0; padding-left: 20px; }
+  .note-box li { margin-bottom: 4px; }
+  .footer-version { margin-top: 10px; font-size: 12px; color: rgba(255,255,255,0.7); font-variant-numeric: tabular-nums; }
 </style>
 </head>
 <body>
@@ -591,133 +680,155 @@
       Ano de referência da transição
       <span class="info-icon" tabindex="0">!
         <span class="tooltip wide drop-down">
-          Define em que ponto do calendário de transição da Reforma Tributária a simulação se posiciona. O PIS/COFINS vira CBS/IBS integralmente já em 2027. O ICMS/ISS, porém, é substituído pelo IBS de forma gradual:
+          Posiciona a simulação no cronograma de transição. O cronograma é separado para CBS e IBS:
           <table>
-            <tr><th>Ano</th><th>ICMS/ISS já convertido em IBS</th></tr>
-            <tr><td>2027 – 2028</td><td>0%</td></tr>
-            <tr><td>2029</td><td>10%</td></tr>
-            <tr><td>2030</td><td>20%</td></tr>
-            <tr><td>2031</td><td>30%</td></tr>
-            <tr><td>2032</td><td>40%</td></tr>
-            <tr><td>2033</td><td>100% (transição concluída)</td></tr>
+            <tr><th>Ano</th><th>CBS (regime regular)</th><th>IBS (regime regular)</th><th>ICMS/ISS do DAS já convertido</th></tr>
+            <tr><td>2027–2028</td><td>α_CBS − 0,1 p.p.</td><td>0,1%</td><td>0%</td></tr>
+            <tr><td>2029</td><td>α_CBS</td><td>10% de α_IBS</td><td>10%</td></tr>
+            <tr><td>2030</td><td>α_CBS</td><td>20% de α_IBS</td><td>20%</td></tr>
+            <tr><td>2031</td><td>α_CBS</td><td>30% de α_IBS</td><td>30%</td></tr>
+            <tr><td>2032</td><td>α_CBS</td><td>40% de α_IBS</td><td>40%</td></tr>
+            <tr><td>2033</td><td>α_CBS</td><td>α_IBS</td><td>100%</td></tr>
           </table>
-          <span class="src">Base legal: LC 214/2025, arts. 501, 508 e 519; LC 87/1996, art. 31-A; LC 116/2003, art. 8-B; EC 132/2023, art. 129 do ADCT.</span>
+          <span class="src">Base legal: EC 132/2023 (ADCT, arts. 125 a 129); LC 214/2025, arts. 344 e 347 (2027–2028), 501, 508 e 519. O IBS de 2029–2032 proporcional à redução do ICMS/ISS é aproximação do modelo.</span>
         </span>
       </span>
     </span>
+    <span class="year-rates" id="year-rates">—</span>
     <select id="ano-ref" class="year-select">
-      <option value="2027">2027</option>
+      <option value="2027" selected>2027</option>
       <option value="2028">2028</option>
       <option value="2029">2029</option>
       <option value="2030">2030</option>
       <option value="2031">2031</option>
       <option value="2032">2032</option>
-      <option value="2033" selected>2033</option>
+      <option value="2033">2033</option>
     </select>
   </div>
 </div>
 
 <div class="wrap">
 
-  <div class="eyebrow">Simulador — Estudo de caso comparativo</div>
+  <div class="eyebrow">Simulador — modelo de decisão com casos ilustrativos</div>
   <h1>Simples Nacional Híbrido: critérios técnicos para a decisão entre a permanência no DAS e a apuração do IBS/CBS pelo regime regular à luz da LC 214/2025</h1>
-  <p class="lede">Compare até três empresas optantes do Simples Nacional quanto ao crédito gerado ao cliente e ao recolhimento próprio em cada regime.</p>
+  <p class="lede">Compare até três empresas optantes do Simples Nacional. O modelo calcula o benefício líquido do regime regular de IBS/CBS (opção semestral, LC 123/2006, art. 13, com redação da LC 227/2026) e o ponto de virada da participação B2B.</p>
 
-  <h2 class="section-title">Parâmetro regulatório</h2>
-  <p class="section-note">Compartilhado entre as três empresas — é a mesma alíquota-padrão nacional do regime regular, independente do Anexo de cada negócio. O ano de referência está fixo no topo da página.</p>
+  <h2 class="section-title">Parâmetros do modelo</h2>
+  <p class="section-note">Valem para as três empresas. Os marcados como "projeção" ainda não têm valor legal definitivo.</p>
 
-  <div class="reg-panel reg-panel-single">
+  <div class="reg-panel reg-panel-wide">
     <div class="field">
       <label>
         <span class="label-left">
-          Alíquota-padrão regime regular <span class="var">α_padrão</span>
+          Alíquota de referência CBS <span class="var">α_CBS</span>
           <span class="info-icon" tabindex="0">!
-            <span class="tooltip">Alíquota-padrão do regime regular de IBS/CBS. Teto legal de 26,50% (LC 214/2025), ainda não definitiva — o CGIBS já projetou uma estimativa metodológica de 27,91% para fins de arrecadação (Resolução CGIBS 14/2026), mas isso não é a alíquota efetivamente cobrada.
-                <span class="suggested">Sugestão: 26,50% (teto legal)</span>
-              </span>
+            <span class="tooltip wide drop-down">Alíquota de referência da CBS, fixada por resolução do Senado Federal. Ainda não definitiva.
+              <span class="suggested">Sugestão: 8,80% (com α_IBS 17,70%, soma 26,50%)</span>
+              <span class="src">A divisão 8,8% / 17,7% é estimativa de divulgação, não valor legal.</span>
+            </span>
           </span>
           <span class="estimate-flag">projeção</span>
         </span>
       </label>
-      <input type="text" inputmode="numeric" class="masked" data-mask="percent" id="alpha" value="2650">
+      <input type="text" inputmode="numeric" class="masked" data-mask="percent" id="alpha-cbs" value="880">
+    </div>
+    <div class="field">
+      <label>
+        <span class="label-left">
+          Alíquota de referência IBS <span class="var">α_IBS</span>
+          <span class="info-icon" tabindex="0">!
+            <span class="tooltip wide drop-down">Soma das alíquotas de referência estadual e municipal do IBS.
+              <br><br>26,50% (CBS + IBS) é <strong>referência</strong>, não teto: se a soma das alíquotas de referência passar desse patamar, o Executivo deve propor projeto de lei complementar para reduzi-la (LC 214/2025, art. 475). A estimativa de 27,91% atribuída à Res. CGIBS 14/2026 é projeção de arrecadação; confira a fonte primária.
+            </span>
+          </span>
+          <span class="estimate-flag">projeção</span>
+        </span>
+      </label>
+      <input type="text" inputmode="numeric" class="masked" data-mask="percent" id="alpha-ibs" value="1770">
+    </div>
+    <div class="field">
+      <label>
+        <span class="label-left">
+          Repasse do crédito ao preço <span class="var">θ</span>
+          <span class="info-icon" tabindex="0">!
+            <span class="tooltip wide drop-down">O crédito a mais que o cliente B2B recebe é benefício do cliente, não receita da empresa. θ é a fração desse crédito que a empresa consegue capturar, via preço maior ou retenção de clientes.
+              <table>
+                <tr><th>θ</th><th>Interpretação</th></tr>
+                <tr><td>100%</td><td>Captura integral do crédito adicional</td></tr>
+                <tr><td>50%</td><td>Crédito dividido com o cliente</td></tr>
+                <tr><td>0%</td><td>Nenhuma captura: só o crédito de insumos conta</td></tr>
+              </table>
+              <span class="src">Hipótese econômica do modelo. Testada na seção de sensibilidade.</span>
+            </span>
+          </span>
+          <span class="estimate-flag">hipótese</span>
+        </span>
+      </label>
+      <input type="text" inputmode="numeric" class="masked" data-mask="percent" id="theta" value="10000">
+    </div>
+    <div class="field">
+      <label>
+        <span class="label-left">
+          Base de comparação
+          <span class="info-icon" tabindex="0">!
+            <span class="tooltip wide drop-down">No DAS, a alíquota incide sobre a receita bruta. No regime regular, IBS/CBS são cobrados "por fora".
+              <br><br><strong>Preço total constante (padrão):</strong> RB é o valor total pago pelo cliente. No Híbrido, o tributo está contido nele: débito = RB × α ÷ (1 + α). É a opção coerente com θ, porque não presume repasse do próprio tributo.
+              <br><br><strong>Receita líquida constante:</strong> o Híbrido acrescenta o tributo sobre RB: débito = RB × α. Presume repasse integral do IBS/CBS ao preço.
+            </span>
+          </span>
+        </span>
+      </label>
+      <select class="mode-select" id="base-mode">
+        <option value="dentro" selected>Preço total constante</option>
+        <option value="fora">Receita líquida constante</option>
+      </select>
     </div>
   </div>
 
   <h2 class="section-title">Empresas</h2>
-  <p class="section-note">Preencha o perfil de até três empresas para comparar a recomendação de regime. O <span class="var" style="font-style:italic">%IBS_CBS_DAS</span> agora é <strong>calculado automaticamente</strong> a partir do Anexo de cada empresa e do ano de referência fixo no topo.</p>
+  <p class="section-note">Valores pré-preenchidos são <strong>casos ilustrativos</strong> (serviço B2C, comércio misto, indústria B2B), não dados reais. Faixa, alíquota efetiva e %IBS/CBS no DAS são calculados automaticamente a partir da receita anual e do Anexo.</p>
 
-  <div class="company-grid" id="company-grid">
-    <!-- Empresa 1, 2, 3 geradas via template abaixo -->
-  </div>
+  <div class="company-grid" id="company-grid"></div>
 
   <h2 class="section-title">Comparativo</h2>
-  <p class="section-note">Resultado por empresa, considerando os parâmetros regulatórios acima.</p>
+  <p class="section-note">Valores anuais, no ano de referência escolhido no topo.</p>
 
   <div class="compare-wrap">
     <table class="compare">
       <thead>
-        <tr>
-          <th>Métrica</th>
-          <th>Empresa 1</th>
-          <th>Empresa 2</th>
-          <th>Empresa 3</th>
-        </tr>
+        <tr><th>Métrica</th><th>Empresa 1</th><th>Empresa 2</th><th>Empresa 3</th></tr>
       </thead>
-      <tbody>
-        <tr>
-          <td><span class="regime-row-label tradicional">DAS</span>Crédito ao cliente</td>
-          <td class="value" id="credito-das-1">—</td>
-          <td class="value" id="credito-das-2">—</td>
-          <td class="value" id="credito-das-3">—</td>
-        </tr>
-        <tr>
-          <td><span class="regime-row-label hibrido">Híbrido</span>Crédito ao cliente</td>
-          <td class="value" id="credito-hib-1">—</td>
-          <td class="value" id="credito-hib-2">—</td>
-          <td class="value" id="credito-hib-3">—</td>
-        </tr>
-        <tr>
-          <td><span class="regime-row-label tradicional">DAS</span>Recolhimento próprio</td>
-          <td class="value" id="recolhe-das-1">—</td>
-          <td class="value" id="recolhe-das-2">—</td>
-          <td class="value" id="recolhe-das-3">—</td>
-        </tr>
-        <tr>
-          <td><span class="regime-row-label hibrido">Híbrido</span>Recolhimento próprio</td>
-          <td class="value" id="recolhe-hib-1">—</td>
-          <td class="value" id="recolhe-hib-2">—</td>
-          <td class="value" id="recolhe-hib-3">—</td>
-        </tr>
-        <tr>
-          <td>Ganho competitivo ponderado</td>
-          <td class="value" id="ganho-1">—</td>
-          <td class="value" id="ganho-2">—</td>
-          <td class="value" id="ganho-3">—</td>
-        </tr>
-        <tr>
-          <td>Diferença de recolhimento (Híbrido − DAS)</td>
-          <td class="value" id="diff-1">—</td>
-          <td class="value" id="diff-2">—</td>
-          <td class="value" id="diff-3">—</td>
-        </tr>
-        <tr>
-          <td>Recomendação do modelo</td>
-          <td class="value"><span class="verdict-badge" id="verdict-1">—</span></td>
-          <td class="value"><span class="verdict-badge" id="verdict-2">—</span></td>
-          <td class="value"><span class="verdict-badge" id="verdict-3">—</span></td>
-        </tr>
-      </tbody>
+      <tbody id="compare-body"></tbody>
     </table>
   </div>
 
   <div class="calc-details-wrap">
-    <details class="calc-detail" id="calc-detail-1"><summary>Ver cálculo detalhado — Empresa 1</summary><div class="calc-body" id="calc-body-1"></div></details>
-    <details class="calc-detail" id="calc-detail-2"><summary>Ver cálculo detalhado — Empresa 2</summary><div class="calc-body" id="calc-body-2"></div></details>
-    <details class="calc-detail" id="calc-detail-3"><summary>Ver cálculo detalhado — Empresa 3</summary><div class="calc-body" id="calc-body-3"></div></details>
+    <details class="calc-detail" id="calc-detail-1"><summary>Ver memória de cálculo — Empresa 1</summary><div class="calc-body" id="calc-body-1"></div></details>
+    <details class="calc-detail" id="calc-detail-2"><summary>Ver memória de cálculo — Empresa 2</summary><div class="calc-body" id="calc-body-2"></div></details>
+    <details class="calc-detail" id="calc-detail-3"><summary>Ver memória de cálculo — Empresa 3</summary><div class="calc-body" id="calc-body-3"></div></details>
   </div>
 
+  <h2 class="section-title">Benefício líquido conforme a participação B2B</h2>
+  <p class="section-note">B(b) = θ·b·ΔC − (ΔC − IC + K), com os demais parâmetros fixos. Acima de zero, o Híbrido compensa. O ponto onde cada reta cruza o zero é o ponto de virada b*.</p>
+  <div class="chart-box">
+    <svg id="chart" viewBox="0 0 760 300" role="img" aria-label="Benefício líquido do Híbrido em função do percentual B2B"></svg>
+    <div class="chart-legend" id="chart-legend"></div>
+  </div>
+
+  <h2 class="section-title">Sensibilidade do ponto de virada</h2>
+  <p class="section-note">Ponto de virada b* por cenário de repasse (θ) e de alíquota de referência total (α_CBS + α_IBS, mantida a proporção informada). Ano de referência, base e demais dados conforme acima.</p>
+  <div class="sens-grid" id="sens-grid"></div>
+
   <div class="note-box">
-    <strong>Nota metodológica.</strong> Os parâmetros marcados como "projeção" ainda não têm valor legal definitivo — dependem de regulamentação do CGSN e de fixação de alíquota pelo Senado Federal (LC 214/2025). Esta ferramenta permite simular diferentes cenários regulatórios, e não deve ser lida como uma calculadora tributária oficial.
+    <strong>Nota metodológica e hipóteses do modelo.</strong>
+    <ol>
+      <li><strong>Critério:</strong> opta-se pelo regime regular quando θ·b·ΔC + IC &gt; ΔC + K, em que ΔC é o crédito adicional transferido ao cliente. Ponto de virada: b* = (ΔC + K − IC) ÷ (θ·ΔC).</li>
+      <li><strong>Crédito no DAS:</strong> o adquirente se credita do IBS/CBS efetivamente pago no DAS (LC 214/2025, art. 47, § 9º). Sem a opção, a empresa do Simples não se credita das próprias compras.</li>
+      <li><strong>Demais tributos do DAS:</strong> a parcela não-IBS/CBS (RB × AE × (1 − s)) é tratada como igual nos dois regimes e se cancela na comparação. Não se modela eventual exclusão do IBS/CBS da receita bruta do Simples.</li>
+      <li><strong>Repartição por faixa:</strong> segue os Anexos I a V da LC 123/2006. Na 5ª faixa dos Anexos III, IV e V, o ISS efetivo é limitado a 5%; a redistribuição do excedente aos tributos federais não é modelada. A parcela de IPI do Anexo II não é convertida em IBS/CBS.</li>
+      <li><strong>Crédito de insumos (IC):</strong> estimativa paramétrica (RB × % de compras tributadas × alíquota do ano), com proporções calibrável pelas pesquisas anuais do IBGE (PIA, PAC, PAS).</li>
+      <li><strong>Escopo:</strong> casos ilustrativos; regimes diferenciados (reduções de 30% e 60%) não modelados. Não é calculadora tributária oficial.</li>
+    </ol>
   </div>
 
 </div>
@@ -727,352 +838,394 @@
     <div class="footer-note">
       Ferramenta desenvolvida no âmbito de Trabalho de Conclusão de Curso em Ciências Contábeis, com apoio de inteligência artificial generativa (<strong>Claude, Anthropic</strong>) na etapa de implementação computacional, conforme descrito na metodologia deste trabalho.
     </div>
+    <div class="footer-version">Versão 2.0 · 03/11/2026 · inclui repasse (θ), custo de conformidade (K), base de comparação, cronograma CBS/IBS separado e repartição por faixa.</div>
     <div class="footer-wordmark">Unifesp — Universidade Federal de São Paulo</div>
   </div>
 </footer>
 
 <script>
-  function fmtBRL(v) {
-    return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-  }
+  // ---------- Tabelas legais (LC 123/2006, Anexos I a V) ----------
+  const LIMITES = [180000, 360000, 720000, 1800000, 3600000, 4800000];
 
-  // ---------- Geração dos 3 cards de empresa ----------
+  const ANEXOS = {
+    I:   { label: 'I — Comércio',        baseLabel: 'ICMS', iss: false,
+           nom: [4.00, 7.30, 9.50, 10.70, 14.30, 19.00], pd: [0, 5940, 13860, 22500, 87300, 378000],
+           cofins: [12.74, 12.74, 12.74, 12.74, 12.74, 28.27], pis: [2.76, 2.76, 2.76, 2.76, 2.76, 6.13],
+           base: [34.00, 34.00, 33.50, 33.50, 33.50, 0] },
+    II:  { label: 'II — Indústria',      baseLabel: 'ICMS', iss: false,
+           nom: [4.50, 7.80, 10.00, 11.20, 14.70, 30.00], pd: [0, 5940, 13860, 22500, 85500, 720000],
+           cofins: [11.51, 11.51, 11.51, 11.51, 11.51, 20.96], pis: [2.49, 2.49, 2.49, 2.49, 2.49, 4.54],
+           base: [32.00, 32.00, 32.00, 32.00, 32.00, 0] },
+    III: { label: 'III — Serviços',      baseLabel: 'ISS', iss: true,
+           nom: [6.00, 11.20, 13.50, 16.00, 21.00, 33.00], pd: [0, 9360, 17640, 35640, 125640, 648000],
+           cofins: [12.82, 14.05, 13.64, 13.64, 12.82, 16.03], pis: [2.78, 3.05, 2.96, 2.96, 2.78, 3.47],
+           base: [33.50, 32.00, 32.50, 32.50, 33.50, 0] },
+    IV:  { label: 'IV — Serviços §5º-C', baseLabel: 'ISS', iss: true,
+           nom: [4.50, 9.00, 10.20, 14.00, 22.00, 33.00], pd: [0, 8100, 12420, 39780, 183780, 828000],
+           cofins: [17.67, 20.55, 19.73, 18.90, 18.08, 20.55], pis: [3.83, 4.45, 4.27, 4.10, 3.92, 4.45],
+           base: [44.50, 40.00, 40.00, 40.00, 40.00, 0] },
+    V:   { label: 'V — Serviços §5º-I',  baseLabel: 'ISS', iss: true,
+           nom: [15.50, 18.00, 19.50, 20.50, 23.00, 30.50], pd: [0, 4500, 9900, 17100, 62100, 540000],
+           cofins: [14.10, 14.10, 14.92, 15.74, 14.10, 16.44], pis: [3.05, 3.05, 3.23, 3.41, 3.05, 3.56],
+           base: [14.00, 17.00, 19.00, 21.00, 23.50, 0] },
+  };
 
-  const aeTooltip = `
-    Alíquota efetiva do Simples Nacional: AE = (RBT12 × Alíquota nominal − Parcela a Deduzir) / RBT12, sobre a receita bruta dos últimos 12 meses.
-    <table>
-      <tr><th>Anexo</th><th>Atividade</th><th>Alíquota 1ª faixa</th></tr>
-      <tr><td>I</td><td>Comércio</td><td>4,00%</td></tr>
-      <tr><td>II</td><td>Indústria</td><td>4,50%</td></tr>
-      <tr><td>III</td><td>Serviços (regra geral)</td><td>6,00%</td></tr>
-      <tr><td>IV</td><td>Serviços §5º-C (construção etc.)</td><td>4,50%</td></tr>
-      <tr><td>V</td><td>Serviços §5º-I (Fator R)</td><td>15,50%</td></tr>
-    </table>
-    <span class="src">Alíquotas nominais da 1ª faixa (até R$ 180.000,00). Fonte: LC 123/2006, Anexos I-V.</span>
-  `;
+  const FRACAO_TRANSICAO = { 2027: 0, 2028: 0, 2029: 0.1, 2030: 0.2, 2031: 0.3, 2032: 0.4, 2033: 1 };
 
-  const pctdasTooltip = `
-    Percentual da alíquota efetiva do Simples que corresponde a IBS/CBS no ano selecionado: soma do que hoje é PIS/COFINS (vira CBS/IBS integralmente já em 2027) com a fração do ICMS/ISS já convertida em IBS até o ano de referência escolhido acima.
-    <table>
-      <tr><th>Anexo</th><th>PIS/COFINS→CBS/IBS</th><th>ICMS/ISS (total, 2033)</th></tr>
-      <tr><td>I — Comércio</td><td>15,50%</td><td>34,00%</td></tr>
-      <tr><td>II — Indústria</td><td>14,00%</td><td>32,00%</td></tr>
-      <tr><td>III — Serviços</td><td>15,60%</td><td>33,50%</td></tr>
-      <tr><td>IV — Serviços §5º-C</td><td>21,50%</td><td>44,50%</td></tr>
-      <tr><td>V — Serviços §5º-I</td><td>17,15%</td><td>14,00%</td></tr>
-    </table>
-    <span class="src">Percentuais de 1ª faixa. Calculado automaticamente conforme o Anexo e o ano de referência selecionados. Base legal: LC 214/2025, arts. 501 (Anexos I/II) e 508 (Anexos III/IV/V), c/c art. 519 e Anexos XVIII a XXII; LC 87/1996, art. 31-A; LC 116/2003, art. 8-B; EC 132/2023, art. 129 do ADCT.</span>
-  `;
+  const PRESETS = [
+    { perfil: 'Exemplo: serviço B2C',    rb: '120000000', anexo: 'III', b2b: '1000', ins: '1500', k: '1800000' },
+    { perfil: 'Exemplo: comércio misto', rb: '240000000', anexo: 'I',   b2b: '5000', ins: '6500', k: '2400000' },
+    { perfil: 'Exemplo: indústria B2B',  rb: '300000000', anexo: 'II',  b2b: '9000', ins: '5500', k: '2400000' },
+  ];
 
-  function companyTemplate(n) {
+  // ---------- Formatação ----------
+  const fmtBRL = v => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  const fmtPct = v => (v * 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+  const fmtNum = (v, d = 2) => v.toLocaleString('pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d });
+
+  // ---------- Cards ----------
+  function companyTemplate(n, p) {
+    const anexoOpts = Object.keys(ANEXOS).map(k =>
+      `<option value="${k}"${k === p.anexo ? ' selected' : ''}>${ANEXOS[k].label}</option>`).join('');
     return `
-      <div class="company-card">
-        <h3>Empresa ${n}</h3>
+      <div class="company-card" data-n="${n}">
+        <h3>Empresa ${n}<span class="profile">${p.perfil}</span></h3>
 
         <div class="field">
-          <label>
-            <span class="label-left">
-              Receita bruta do período <span class="var">RB</span>
-              <span class="info-icon" tabindex="0">!
-                <span class="tooltip">Receita bruta da operação, nota ou período analisado, em reais.</span>
-              </span>
-            </span>
-          </label>
-          <div class="input-prefix">
-            <span class="prefix-label">R$</span>
-            <input type="text" inputmode="numeric" class="masked" data-mask="currency" id="rb${n}" value="5000000">
+          <label><span class="label-left">Receita bruta anual <span class="var">RB</span>
+            <span class="info-icon" tabindex="0">!<span class="tooltip">Receita bruta dos últimos 12 meses (RBT12), usada também para enquadrar a faixa. Os resultados são anuais.</span></span>
+          </span></label>
+          <div class="input-prefix"><span class="prefix-label">R$</span>
+            <input type="text" inputmode="numeric" class="masked" data-mask="currency" id="rb${n}" value="${p.rb}">
           </div>
         </div>
 
         <div class="field">
-          <label>
-            <span class="label-left">
-              Alíquota efetiva do Simples <span class="var">AE</span>
-              <span class="info-icon" tabindex="0">!
-                <span class="tooltip wide">${aeTooltip}</span>
-              </span>
-            </span>
-          </label>
-          <input type="text" inputmode="numeric" class="masked" data-mask="percent" id="ae${n}" value="800">
+          <label><span class="label-left">Anexo do Simples Nacional
+            <span class="info-icon" tabindex="0">!<span class="tooltip">Define a tabela de alíquotas e a repartição dos tributos dentro do DAS.</span></span>
+          </span></label>
+          <select class="anexo-select" id="anexo${n}">${anexoOpts}</select>
         </div>
 
         <div class="field">
-          <label>
-            <span class="label-left">
-              Anexo do Simples Nacional
-              <span class="info-icon" tabindex="0">!
-                <span class="tooltip">Define a atividade da empresa e, por consequência, a proporção do PIS/COFINS e do ICMS/ISS embutida na alíquota efetiva — base para o cálculo automático do %IBS_CBS_DAS abaixo.</span>
-              </span>
-            </span>
-          </label>
-          <select class="anexo-select" id="anexo${n}">
-            <option value="I">I — Comércio</option>
-            <option value="II">II — Indústria</option>
-            <option value="III" selected>III — Serviços (regra geral)</option>
-            <option value="IV">IV — Serviços §5º-C</option>
-            <option value="V">V — Serviços §5º-I</option>
-          </select>
+          <label><span class="label-left">Faixa e alíquota efetiva <span class="var">AE</span>
+            <span class="info-icon" tabindex="0">!<span class="tooltip wide">AE = (RBT12 × alíquota nominal − parcela a deduzir) ÷ RBT12. Faixa enquadrada automaticamente pela RB.<span class="src">LC 123/2006, art. 18, §§ 1º e 1º-A, e Anexos I a V.</span></span></span>
+            <span class="estimate-flag">automático</span>
+          </span></label>
+          <input type="text" class="masked" id="ae${n}" value="" readonly>
+          <div class="calc-caption" id="ae-caption-${n}"></div>
+          <div class="card-warn" id="ae-warn-${n}" hidden></div>
         </div>
 
         <div class="field">
-          <label>
-            <span class="label-left">
-              % IBS/CBS dentro da AE <span class="var">%IBS_CBS_DAS</span>
-              <span class="info-icon" tabindex="0">!
-                <span class="tooltip wide">${pctdasTooltip}</span>
-              </span>
-              <span class="estimate-flag">automático</span>
-            </span>
-          </label>
-          <input type="text" class="masked" data-mask="percent" id="pctdas${n}" value="4910" readonly>
+          <label><span class="label-left">% IBS/CBS dentro da AE <span class="var">s</span>
+            <span class="info-icon" tabindex="0">!<span class="tooltip wide">Parcela da AE que vira IBS/CBS no ano: PIS + COFINS da faixa (integral desde 2027) mais a fração já convertida do ICMS/ISS. Na 5ª faixa dos Anexos de serviço, o ISS efetivo é limitado a 5% da receita.<span class="src">LC 123/2006, Anexos I a V (repartição por faixa); LC 214/2025, arts. 501, 508 e 519.</span></span></span>
+            <span class="estimate-flag">automático</span>
+          </span></label>
+          <input type="text" class="masked" id="pctdas${n}" value="" readonly>
           <div class="calc-caption" id="pctdas-caption-${n}"></div>
         </div>
 
         <div class="field">
-          <label>
-            <span class="label-left">
-              % Receita vinda de clientes B2B <span class="var">%B2B</span>
-              <span class="info-icon" tabindex="0">!
-                <span class="tooltip">Percentual da receita vindo de clientes do regime regular, que aproveitam o crédito de IBS/CBS.</span>
-              </span>
-            </span>
-          </label>
-          <input type="text" inputmode="numeric" class="masked" data-mask="percent" id="b2b${n}" value="5000">
+          <label><span class="label-left">% da receita com clientes B2B <span class="var">b</span>
+            <span class="info-icon" tabindex="0">!<span class="tooltip">Parcela da receita vendida a clientes do regime regular, que aproveitam o crédito de IBS/CBS.</span></span>
+          </span></label>
+          <input type="text" inputmode="numeric" class="masked" data-mask="percent" id="b2b${n}" value="${p.b2b}">
         </div>
 
         <div class="field">
-          <label>
-            <span class="label-left">
-              Crédito de insumos pago <span class="var">IC</span>
-              <span class="info-icon" tabindex="0">!
-                <span class="tooltip wide">
-                  Total de IBS/CBS pago pela própria empresa em insumos e compras tributadas no período, em reais. Corresponde, no regime híbrido, ao imposto destacado nas notas de compra da empresa (não do que ela vende).
-                  <br><br>
-                  <strong>Não sei calcular isso — como estimo?</strong> Não há uma tabela oficial pra isso (o crédito real depende das compras específicas de cada empresa). Uma forma aproximada, só para simulação, é: estimar o quanto da receita é gasto em insumos tributáveis, e aplicar a alíquota-padrão (α_padrão) sobre esse valor:
-                  <table>
-                    <tr><th>Perfil</th><th>Insumos típicos (% da RB)</th></tr>
-                    <tr><td>Comércio (CMV alto)</td><td>~ 60–75%</td></tr>
-                    <tr><td>Indústria</td><td>~ 45–60%</td></tr>
-                    <tr><td>Serviços (baixo insumo)</td><td>~ 10–25%</td></tr>
-                  </table>
-                  <span class="suggested">IC ≈ RB × % insumos × α_padrão</span>
-                  <span class="src">Isso é uma aproximação prática de estrutura de custos por setor — não tem base legal ou tabela oficial. Sirva-se dela só como ponto de partida para a simulação, não como cálculo definitivo.</span>
-                </span>
-              </span>
-            </span>
-          </label>
-          <div class="input-prefix">
-            <span class="prefix-label">R$</span>
-            <input type="text" inputmode="numeric" class="masked" data-mask="currency" id="ic${n}" value="400000">
+          <label><span class="label-left">Compras tributadas (% da RB) <span class="var">i</span>
+            <span class="info-icon" tabindex="0">!<span class="tooltip wide">Base do crédito de insumos (IC), o IBS/CBS das compras da própria empresa, aproveitável somente no regime regular.
+              <br><br><strong>Estimativa paramétrica:</strong> IC = RB × i × α ÷ (1 + α) na base "preço total constante", ou RB × i × α na outra base. Assim o IC acompanha a alíquota do ano e dos cenários.
+              <table>
+                <tr><th>Perfil</th><th>Insumos (% da RB)</th></tr>
+                <tr><td>Comércio</td><td>60–75%</td></tr>
+                <tr><td>Indústria</td><td>45–60%</td></tr>
+                <tr><td>Serviços</td><td>10–25%</td></tr>
+              </table>
+              <span class="src">Faixas indicativas, a calibrar com as pesquisas anuais do IBGE (PIA — indústria, PAC — comércio, PAS — serviços).</span></span></span>
+            <span class="estimate-flag">estimativa</span>
+          </span></label>
+          <input type="text" inputmode="numeric" class="masked" data-mask="percent" id="ins${n}" value="${p.ins}">
+          <div class="calc-caption" id="ic-caption-${n}"></div>
+        </div>
+
+        <div class="field">
+          <label><span class="label-left">Custo de conformidade adicional <span class="var">K</span>
+            <span class="info-icon" tabindex="0">!<span class="tooltip wide">Custo anual extra de apurar IBS/CBS pelo regime regular: escrituração, sistemas, horas de contabilidade. Torna mensurável o "custo da simplicidade" perdido com a opção.</span></span>
+            <span class="estimate-flag">estimativa</span>
+          </span></label>
+          <div class="input-prefix"><span class="prefix-label">R$</span>
+            <input type="text" inputmode="numeric" class="masked" data-mask="currency" id="k${n}" value="${p.k}">
           </div>
         </div>
-      </div>
-    `;
+      </div>`;
   }
 
-  document.getElementById('company-grid').innerHTML =
-    companyTemplate(1) + companyTemplate(2) + companyTemplate(3);
-
-  // ---------- Cenário: Anexo × Ano de referência ----------
-
-  const ANEXO_DATA = {
-    I:   { label: 'I — Comércio',              pisCofins: 15.50, base: 34.00, baseLabel: 'ICMS' },
-    II:  { label: 'II — Indústria',             pisCofins: 14.00, base: 32.00, baseLabel: 'ICMS' },
-    III: { label: 'III — Serviços',             pisCofins: 15.60, base: 33.50, baseLabel: 'ISS' },
-    IV:  { label: 'IV — Serviços §5º-C',        pisCofins: 21.50, base: 44.50, baseLabel: 'ISS' },
-    V:   { label: 'V — Serviços §5º-I',         pisCofins: 17.15, base: 14.00, baseLabel: 'ISS' },
-  };
-
-  const YEAR_REDUCTION = { 2027: 0, 2028: 0, 2029: 10, 2030: 20, 2031: 30, 2032: 40, 2033: 100 };
-
-  function updatePctDas(n) {
-    const anexoKey = document.getElementById('anexo' + n).value;
-    const year = parseInt(document.getElementById('ano-ref').value, 10);
-    const a = ANEXO_DATA[anexoKey];
-    const reducao = YEAR_REDUCTION[year] / 100;
-    const baseConvertida = a.base * reducao;
-    const total = a.pisCofins + baseConvertida;
-
-    const input = document.getElementById('pctdas' + n);
-    input.dataset.raw = total;
-    input.value = total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
-
-    const caption = document.getElementById('pctdas-caption-' + n);
-    caption.textContent = `${a.pisCofins.toLocaleString('pt-BR',{minimumFractionDigits:2})}% (PIS/COFINS) + ${a.base.toLocaleString('pt-BR',{minimumFractionDigits:2})}% × ${YEAR_REDUCTION[year]}% (${a.baseLabel}→IBS em ${year}) = ${total.toLocaleString('pt-BR',{minimumFractionDigits:2})}%`;
-  }
-
-  function updateAllPctDas() {
-    [1, 2, 3].forEach(updatePctDas);
-    calc();
-  }
+  document.getElementById('company-grid').innerHTML = PRESETS.map((p, i) => companyTemplate(i + 1, p)).join('');
 
   // ---------- Máscara ----------
-
   function applyMask(input) {
     const isPercent = input.dataset.mask === 'percent';
     let digits = input.value.replace(/\D/g, '');
     if (!digits) digits = '0';
     digits = digits.replace(/^0+(?=\d)/, '');
-    const numericValue = parseInt(digits, 10) / 100;
-    input.dataset.raw = numericValue;
-    const formatted = numericValue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    input.value = isPercent ? formatted + '%' : formatted;
+    const v = parseInt(digits, 10) / 100;
+    input.dataset.raw = v;
+    const f = fmtNum(v);
+    input.value = isPercent ? f + '%' : f;
+  }
+  const raw = id => { const el = document.getElementById(id); return el ? parseFloat(el.dataset.raw || '0') : 0; };
+
+  // ---------- Modelo (funções puras) ----------
+  function faixaDe(rb) {
+    for (let i = 0; i < LIMITES.length; i++) if (rb <= LIMITES[i]) return i;
+    return LIMITES.length - 1;
   }
 
-  function rawValue(id) {
-    const el = document.getElementById(id);
-    return el ? parseFloat(el.dataset.raw || '0') : 0;
-  }
-
-  function setupMaskedInputs() {
-    document.querySelectorAll('input.masked:not([readonly])').forEach(el => {
-      applyMask(el);
-      el.addEventListener('input', () => { applyMask(el); calc(); });
-      el.addEventListener('focus', () => requestAnimationFrame(() => el.select()));
-    });
-  }
-
-  function setupScenarioControls() {
-    document.getElementById('ano-ref').addEventListener('change', updateAllPctDas);
-    [1, 2, 3].forEach(n => {
-      document.getElementById('anexo' + n).addEventListener('change', () => { updatePctDas(n); calc(); });
-    });
-  }
-
-  // ---------- Cálculo ----------
-
-  function calcCompany(n) {
-    const rb = rawValue('rb' + n);
-    const ae = rawValue('ae' + n) / 100;
-    const b2b = rawValue('b2b' + n) / 100;
-    const ic = rawValue('ic' + n);
-    const pctdas = rawValue('pctdas' + n) / 100;
-    const alpha = rawValue('alpha') / 100;
-
-    const creditoDas = rb * ae * pctdas;
-    const creditoHib = rb * alpha;
-    const deltaCredito = creditoHib - creditoDas;
-    const ganhoPonderado = deltaCredito * b2b;
-
-    const recolheDas = creditoDas;
-    const recolheHib = (rb * alpha) - ic;
-    const diffRecolhimento = recolheHib - recolheDas;
-
-    const recomendaHibrido = ganhoPonderado > diffRecolhimento;
-
-    document.getElementById('credito-das-' + n).textContent = fmtBRL(creditoDas);
-    document.getElementById('credito-hib-' + n).textContent = fmtBRL(creditoHib);
-    document.getElementById('recolhe-das-' + n).textContent = fmtBRL(recolheDas);
-    document.getElementById('recolhe-hib-' + n).textContent = fmtBRL(recolheHib);
-    document.getElementById('ganho-' + n).textContent = fmtBRL(ganhoPonderado);
-    document.getElementById('diff-' + n).textContent = fmtBRL(diffRecolhimento);
-
-    const badge = document.getElementById('verdict-' + n);
-    badge.classList.remove('is-hibrido', 'is-tradicional');
-    if (recomendaHibrido) {
-      badge.classList.add('is-hibrido');
-      badge.textContent = 'Híbrido';
-    } else {
-      badge.classList.add('is-tradicional');
-      badge.textContent = 'Tradicional (DAS)';
+  function aliquotasNoAno(ano, aCbs, aIbs) {
+    const f = FRACAO_TRANSICAO[ano];
+    if (ano <= 2028) {
+      const cbs = Math.max(aCbs - 0.001, 0);
+      return { cbs, ibs: 0.001, total: cbs + 0.001, f };
     }
-
-    renderCalcDetail(n, {
-      rb, ae, pctdas, alpha, b2b, ic,
-      creditoDas, creditoHib, deltaCredito, ganhoPonderado,
-      recolheDas, recolheHib, diffRecolhimento, recomendaHibrido
-    });
+    return { cbs: aCbs, ibs: aIbs * f, total: aCbs + aIbs * f, f };
   }
 
-  function fmtPct(v) {
-    return (v * 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+  function simplesDa(rb, anexoKey, ano) {
+    const a = ANEXOS[anexoKey];
+    const i = faixaDe(rb);
+    const ae = rb > 0 ? (rb * a.nom[i] / 100 - a.pd[i]) / rb : a.nom[0] / 100;
+    const pisCofins = a.pis[i] + a.cofins[i];
+    let base = a.base[i];
+    let capped = false;
+    if (a.iss && ae > 0 && ae * base / 100 > 0.05) { base = 0.05 / ae * 100; capped = true; }
+    const f = FRACAO_TRANSICAO[ano];
+    const s = (pisCofins + base * f) / 100;
+    return { faixa: i + 1, ae, pisCofins, base, baseOriginal: a.base[i], capped, f, s, a, acimaLimite: rb > LIMITES[5] };
+  }
+
+  function modelo(p) {
+    // p: rb, ae, s, alpha, b, ic, k, theta, mode
+    const fatorA = p.mode === 'dentro' ? p.alpha / (1 + p.alpha) : p.alpha;
+    const debito = p.rb * fatorA;
+    p = Object.assign({}, p, { ic: p.rb * p.ins * fatorA });
+    const creditoDas = p.rb * p.ae * p.s;
+    const creditoHib = debito;
+    const dC = creditoHib - creditoDas;
+    const recolheDas = creditoDas;
+    const recolheHib = debito - p.ic;
+    const outrosDas = p.rb * p.ae * (1 - p.s);
+    const cargaDas = outrosDas + recolheDas;
+    const cargaHib = outrosDas + recolheHib + p.k;
+    const ganho = p.theta * p.b * dC;
+    const custoAdic = dC - p.ic + p.k;
+    const beneficio = ganho - custoAdic;
+    const denom = p.theta * dC;
+    const bStar = denom > 0 ? (dC + p.k - p.ic) / denom : null;
+    return { ic: p.ic, debito, creditoDas, creditoHib, dC, recolheDas, recolheHib, outrosDas, cargaDas, cargaHib, ganho, custoAdic, beneficio, bStar, recomendaHibrido: beneficio > 0 };
+  }
+
+  function fmtBStar(bs, custoAdic) {
+    if (bs === null) return custoAdic < 0 ? 'Híbrido para qualquer b' : 'DAS para qualquer b';
+    if (bs <= 0) return '≤ 0% (Híbrido sempre)';
+    if (bs > 1) return '> 100% (DAS sempre)';
+    return fmtPct(bs);
+  }
+
+  // ---------- Leitura do estado ----------
+  function estado() {
+    const ano = parseInt(document.getElementById('ano-ref').value, 10);
+    const aCbs = raw('alpha-cbs') / 100;
+    const aIbs = raw('alpha-ibs') / 100;
+    const theta = Math.min(raw('theta') / 100, 1);
+    const mode = document.getElementById('base-mode').value;
+    const al = aliquotasNoAno(ano, aCbs, aIbs);
+    const empresas = [1, 2, 3].map(n => {
+      const rb = raw('rb' + n);
+      const sd = simplesDa(rb, document.getElementById('anexo' + n).value, ano);
+      return { n, rb, sd, b: raw('b2b' + n) / 100, ins: raw('ins' + n) / 100, k: raw('k' + n) };
+    });
+    return { ano, aCbs, aIbs, theta, mode, al, empresas };
+  }
+
+  function paramsDe(st, e, over = {}) {
+    return Object.assign({ rb: e.rb, ae: e.sd.ae, s: e.sd.s, alpha: st.al.total, b: e.b, ins: e.ins, k: e.k, theta: st.theta, mode: st.mode }, over);
+  }
+
+  // ---------- Renderização ----------
+  function renderCard(st, e) {
+    const { sd } = e;
+    const aeEl = document.getElementById('ae' + e.n);
+    aeEl.value = `${sd.faixa}ª faixa · ${fmtPct(sd.ae)}`;
+    document.getElementById('ae-caption-' + e.n).textContent =
+      `(${fmtNum(e.rb)} × ${fmtNum(sd.a.nom[sd.faixa - 1])}% − ${fmtNum(sd.a.pd[sd.faixa - 1])}) ÷ ${fmtNum(e.rb)}`;
+    const warn = document.getElementById('ae-warn-' + e.n);
+    const msgs = [];
+    if (sd.acimaLimite) msgs.push('RB acima de R$ 4,8 milhões: fora do limite do Simples Nacional.');
+    if (sd.faixa === 6) msgs.push('6ª faixa: ICMS/ISS recolhido fora do DAS (sem parcela a converter).');
+    if (sd.capped) msgs.push(`ISS efetivo limitado a 5% (repartição de ${fmtNum(sd.baseOriginal)}% reduzida para ${fmtNum(sd.base)}%).`);
+    warn.hidden = msgs.length === 0;
+    warn.textContent = msgs.join(' ');
+    document.getElementById('pctdas' + e.n).value = fmtPct(sd.s);
+    document.getElementById('pctdas-caption-' + e.n).textContent =
+      `${fmtNum(sd.pisCofins)}% (PIS/COFINS) + ${fmtNum(sd.base)}% × ${fmtNum(sd.f * 100, 0)}% (${sd.a.baseLabel}→IBS em ${st.ano}) = ${fmtPct(sd.s)}`;
+  }
+
+  function renderCompare(st, res) {
+    const cell = (v, cls = '') => `<td class="value ${cls}">${v}</td>`;
+    const row = (label, vals, extra = '') => `<tr${extra}><td>${label}</td>${vals.join('')}</tr>`;
+    const group = t => `<tr class="group"><td colspan="4">${t}</td></tr>`;
+    const tag = (t, c) => `<span class="regime-row-label ${c}">${t}</span>`;
+    let h = '';
+    h += group('Enquadramento');
+    h += row('Faixa · AE', st.empresas.map(e => cell(`${e.sd.faixa}ª · ${fmtPct(e.sd.ae)}`)));
+    h += row('IBS/CBS dentro da AE (s)', st.empresas.map(e => cell(fmtPct(e.sd.s))));
+    h += group('Crédito transferido ao cliente');
+    h += row(tag('DAS', 'tradicional') + 'Crédito ao cliente', res.map(r => cell(fmtBRL(r.creditoDas))));
+    h += row(tag('Híbrido', 'hibrido') + 'Crédito ao cliente', res.map(r => cell(fmtBRL(r.creditoHib))));
+    h += row('Crédito adicional (ΔC)', res.map(r => cell(fmtBRL(r.dC))));
+    h += group('Custo próprio');
+    h += row(tag('DAS', 'tradicional') + 'IBS/CBS recolhido', res.map(r => cell(fmtBRL(r.recolheDas))));
+    h += row(tag('Híbrido', 'hibrido') + 'Crédito de insumos (IC)', res.map(r => cell(fmtBRL(r.ic))));
+    h += row(tag('Híbrido', 'hibrido') + 'IBS/CBS recolhido (débito − IC)', res.map(r => cell(fmtBRL(r.recolheHib))));
+    h += row(tag('Híbrido', 'hibrido') + 'Custo de conformidade (K)', st.empresas.map(e => cell(fmtBRL(e.k))));
+    h += row(tag('DAS', 'tradicional') + 'Carga total (DAS inteiro)', res.map(r => cell(fmtBRL(r.cargaDas))));
+    h += row(tag('Híbrido', 'hibrido') + 'Carga total (DAS restante + IBS/CBS + K)', res.map(r => cell(fmtBRL(r.cargaHib))));
+    h += group('Decisão');
+    h += row('Ganho capturado (θ · b · ΔC)', res.map(r => cell(fmtBRL(r.ganho))));
+    h += row('Custo adicional (ΔC − IC + K)', res.map(r => cell(fmtBRL(r.custoAdic))));
+    h += row('Benefício líquido do Híbrido (B)', res.map(r => cell(fmtBRL(r.beneficio), r.beneficio > 0 ? 'pos' : 'neg')), ' class="key"');
+    h += row('Ponto de virada (b*)', res.map(r => cell(fmtBStar(r.bStar, r.custoAdic))));
+    h += row('Recomendação do modelo', res.map(r =>
+      `<td class="value"><span class="verdict-badge ${r.recomendaHibrido ? 'is-hibrido' : 'is-tradicional'}">${r.recomendaHibrido ? 'Híbrido' : 'Tradicional (DAS)'}</span></td>`));
+    document.getElementById('compare-body').innerHTML = h;
   }
 
   function step(label, formula, substitution, result) {
-    return `
-      <div class="calc-step">
-        <div class="calc-label">${label}</div>
-        <div class="calc-formula">${formula}</div>
-        <div class="calc-substitution">${substitution}</div>
-        <div class="calc-result">= ${result}</div>
-      </div>
-    `;
+    return `<div class="calc-step"><div class="calc-label">${label}</div><div class="calc-formula">${formula}</div><div class="calc-substitution">${substitution}</div><div class="calc-result">= ${result}</div></div>`;
   }
 
-  function renderCalcDetail(n, v) {
-    const body = document.getElementById('calc-body-' + n);
-    if (!body) return;
+  function renderDetail(st, e, r) {
+    const al = st.al;
+    const debForm = st.mode === 'dentro' ? 'Débito = RB × α ÷ (1 + α)' : 'Débito = RB × α';
+    const debSub = st.mode === 'dentro'
+      ? `${fmtBRL(e.rb)} × ${fmtPct(al.total)} ÷ (1 + ${fmtPct(al.total)})`
+      : `${fmtBRL(e.rb)} × ${fmtPct(al.total)}`;
+    let h = '';
+    h += step('1. Alíquota do regime regular no ano (α)', 'α = CBS do ano + IBS do ano',
+      `${fmtPct(al.cbs)} + ${fmtPct(al.ibs)}`, fmtPct(al.total));
+    h += step('2. Crédito ao cliente — DAS', 'C_DAS = RB × AE × s  (LC 214/2025, art. 47, § 9º)',
+      `${fmtBRL(e.rb)} × ${fmtPct(e.sd.ae)} × ${fmtPct(e.sd.s)}`, fmtBRL(r.creditoDas));
+    h += step('3. Débito e crédito ao cliente — Híbrido', debForm, debSub, fmtBRL(r.debito));
+    h += step('4. Crédito adicional', 'ΔC = C_Híbrido − C_DAS', `${fmtBRL(r.creditoHib)} − ${fmtBRL(r.creditoDas)}`, fmtBRL(r.dC));
+    h += step('4b. Crédito de insumos', st.mode === 'dentro' ? 'IC = RB × i × α ÷ (1 + α)' : 'IC = RB × i × α',
+      `${fmtBRL(e.rb)} × ${fmtPct(e.ins)} × ${st.mode === 'dentro' ? fmtPct(al.total) + ' ÷ (1 + ' + fmtPct(al.total) + ')' : fmtPct(al.total)}`, fmtBRL(r.ic));
+    h += step('5. Ganho capturado', 'G = θ × b × ΔC', `${fmtPct(st.theta)} × ${fmtPct(e.b)} × ${fmtBRL(r.dC)}`, fmtBRL(r.ganho));
+    h += step('6. Custo adicional próprio', 'CA = (Débito − IC + K) − C_DAS = ΔC − IC + K',
+      `${fmtBRL(r.dC)} − ${fmtBRL(r.ic)} + ${fmtBRL(e.k)}`, fmtBRL(r.custoAdic));
+    h += step('7. Benefício líquido do Híbrido', 'B = G − CA', `${fmtBRL(r.ganho)} − ${fmtBRL(r.custoAdic)}`, fmtBRL(r.beneficio));
+    h += step('8. Ponto de virada', 'b* = (ΔC + K − IC) ÷ (θ × ΔC)',
+      r.bStar === null ? 'θ × ΔC ≤ 0: indefinido' : `(${fmtBRL(r.dC)} + ${fmtBRL(e.k)} − ${fmtBRL(r.ic)}) ÷ (${fmtPct(st.theta)} × ${fmtBRL(r.dC)})`,
+      fmtBStar(r.bStar, r.custoAdic));
+    h += `<div class="calc-step"><div class="calc-label">9. Critério de decisão</div>
+      <div class="calc-formula">Híbrido se B &gt; 0, ou seja, se b &gt; b*</div>
+      <div class="calc-substitution">B = ${fmtBRL(r.beneficio)} ${r.beneficio > 0 ? '&gt;' : '≤'} 0</div>
+      <div class="calc-result">→ Regime recomendado: ${r.recomendaHibrido ? 'Híbrido' : 'Tradicional (DAS)'}</div></div>`;
+    h += step('Conferência: carga total', 'Carga_Híbrido − Carga_DAS = CA',
+      `${fmtBRL(r.cargaHib)} − ${fmtBRL(r.cargaDas)}`, fmtBRL(r.cargaHib - r.cargaDas));
+    document.getElementById('calc-body-' + e.n).innerHTML = h;
+  }
 
-    let html = '';
+  function renderChart(st) {
+    const svg = document.getElementById('chart');
+    const W = 760, H = 300, L = 86, R = 20, T = 16, B = 40;
+    const cores = ['var(--serie-1)', 'var(--serie-2)', 'var(--serie-3)'];
+    const linhas = st.empresas.map(e => {
+      const y0 = modelo(paramsDe(st, e, { b: 0 })).beneficio;
+      const y1 = modelo(paramsDe(st, e, { b: 1 })).beneficio;
+      return { e, y0, y1 };
+    });
+    let yMin = Math.min(0, ...linhas.flatMap(l => [l.y0, l.y1]));
+    let yMax = Math.max(0, ...linhas.flatMap(l => [l.y0, l.y1]));
+    if (yMax - yMin < 1) { yMax += 1; yMin -= 1; }
+    const pad = (yMax - yMin) * 0.08; yMax += pad; yMin -= pad;
+    const x = b => L + b * (W - L - R);
+    const y = v => T + (yMax - v) / (yMax - yMin) * (H - T - B);
+    const passo = (() => {
+      const raw = (yMax - yMin) / 5, mag = Math.pow(10, Math.floor(Math.log10(raw)));
+      return [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => s >= raw);
+    })();
+    let g = '';
+    for (let v = Math.ceil(yMin / passo) * passo; v <= yMax; v += passo) {
+      g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1"/>`;
+      g += `<text x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${(v / 1000).toLocaleString('pt-BR', { maximumFractionDigits: 0 })} mil</text>`;
+    }
+    for (let b = 0; b <= 1.0001; b += 0.2) {
+      g += `<line x1="${x(b)}" x2="${x(b)}" y1="${T}" y2="${H - B}" stroke="var(--line)" stroke-width="1" stroke-dasharray="2 4"/>`;
+      g += `<text x="${x(b)}" y="${H - B + 18}" text-anchor="middle">${Math.round(b * 100)}%</text>`;
+    }
+    g += `<line x1="${L}" x2="${W - R}" y1="${y(0)}" y2="${y(0)}" stroke="var(--ink-soft)" stroke-width="1.5"/>`;
+    g += `<text x="${(L + W - R) / 2}" y="${H - 4}" text-anchor="middle">% da receita com clientes B2B (b)</text>`;
+    linhas.forEach((l, i) => {
+      g += `<line x1="${x(0)}" y1="${y(l.y0)}" x2="${x(1)}" y2="${y(l.y1)}" stroke="${cores[i]}" stroke-width="2.5" stroke-linecap="round"/>`;
+      const bs = l.y1 !== l.y0 ? -l.y0 / (l.y1 - l.y0) : null;
+      if (bs !== null && bs >= 0 && bs <= 1) {
+        g += `<circle cx="${x(bs)}" cy="${y(0)}" r="5" fill="var(--surface)" stroke="${cores[i]}" stroke-width="2.5"/>`;
+      }
+      g += `<circle cx="${x(l.e.b)}" cy="${y(modelo(paramsDe(st, l.e)).beneficio)}" r="4" fill="${cores[i]}"/>`;
+    });
+    svg.innerHTML = g;
+    document.getElementById('chart-legend').innerHTML = st.empresas.map((e, i) =>
+      `<span><i style="background:${cores[i]}"></i>Empresa ${e.n} (${PRESETS[i].perfil.replace('Exemplo: ', '')})</span>`).join('') +
+      `<span>● posição atual de b · ○ ponto de virada</span>`;
+  }
 
-    html += step(
-      '1. Crédito ao cliente — Tradicional (DAS)',
-      'Crédito_DAS = RB × AE × %IBS_CBS_DAS',
-      `${fmtBRL(v.rb)} × ${fmtPct(v.ae)} × ${fmtPct(v.pctdas)}`,
-      fmtBRL(v.creditoDas)
-    );
-
-    html += step(
-      '2. Crédito ao cliente — Híbrido',
-      'Crédito_Híbrido = RB × α_padrão',
-      `${fmtBRL(v.rb)} × ${fmtPct(v.alpha)}`,
-      fmtBRL(v.creditoHib)
-    );
-
-    html += step(
-      '3. Diferencial de crédito',
-      'ΔCrédito = Crédito_Híbrido − Crédito_DAS',
-      `${fmtBRL(v.creditoHib)} − ${fmtBRL(v.creditoDas)}`,
-      fmtBRL(v.deltaCredito)
-    );
-
-    html += step(
-      '4. Ganho competitivo ponderado',
-      'Ganho = ΔCrédito × %B2B',
-      `${fmtBRL(v.deltaCredito)} × ${fmtPct(v.b2b)}`,
-      fmtBRL(v.ganhoPonderado)
-    );
-
-    html += step(
-      '5. Recolhimento próprio — Tradicional (DAS)',
-      'Recolhimento_DAS = Crédito_DAS (já embutido na guia única)',
-      `${fmtBRL(v.creditoDas)}`,
-      fmtBRL(v.recolheDas)
-    );
-
-    html += step(
-      '6. Recolhimento próprio — Híbrido',
-      'Recolhimento_Híbrido = (RB × α_padrão) − Crédito de insumos (IC)',
-      `(${fmtBRL(v.rb)} × ${fmtPct(v.alpha)}) − ${fmtBRL(v.ic)}`,
-      fmtBRL(v.recolheHib)
-    );
-
-    html += step(
-      '7. Diferença de recolhimento',
-      'Diferença = Recolhimento_Híbrido − Recolhimento_DAS',
-      `${fmtBRL(v.recolheHib)} − ${fmtBRL(v.recolheDas)}`,
-      fmtBRL(v.diffRecolhimento)
-    );
-
-    html += `
-      <div class="calc-step">
-        <div class="calc-label">8. Critério de decisão</div>
-        <div class="calc-formula">Recomenda-se o Híbrido quando Ganho competitivo ponderado &gt; Diferença de recolhimento</div>
-        <div class="calc-substitution">${fmtBRL(v.ganhoPonderado)} ${v.recomendaHibrido ? '&gt;' : '≤'} ${fmtBRL(v.diffRecolhimento)}</div>
-        <div class="calc-result">→ Regime recomendado: ${v.recomendaHibrido ? 'Híbrido' : 'Tradicional (DAS)'}</div>
-      </div>
-    `;
-
-    body.innerHTML = html;
+  function renderSens(st) {
+    const totais = [0.265, 0.2791, 0.285];
+    const thetas = [1, 0.5, 0];
+    const somaRef = st.aCbs + st.aIbs || 1;
+    document.getElementById('sens-grid').innerHTML = st.empresas.map((e, i) => {
+      let t = `<table><thead><tr><th>θ \\ α total</th>${totais.map(a => `<th>${fmtPct(a)}</th>`).join('')}</tr></thead><tbody>`;
+      thetas.forEach(th => {
+        t += `<tr><td>θ = ${fmtNum(th * 100, 0)}%</td>`;
+        totais.forEach(tot => {
+          const fator = tot / somaRef;
+          const al = aliquotasNoAno(st.ano, st.aCbs * fator, st.aIbs * fator);
+          const r = modelo(paramsDe(st, e, { alpha: al.total, theta: th }));
+          const cls = r.recomendaHibrido ? 'cell-hib' : 'cell-das';
+          t += `<td class="${cls}" title="Recomendação com b atual: ${r.recomendaHibrido ? 'Híbrido' : 'DAS'}">${fmtBStar(r.bStar, r.custoAdic)}</td>`;
+        });
+        t += '</tr>';
+      });
+      t += '</tbody></table>';
+      return `<div class="sens-card"><h4>Empresa ${e.n} · ${PRESETS[i].perfil.replace('Exemplo: ', '')}</h4>${t}
+        <div class="sens-legend">Células em azul: Híbrido recomendado com o b atual (${fmtPct(e.b)}); em cinza: DAS. 28,50% é cenário alto hipotético.</div></div>`;
+    }).join('');
   }
 
   function calc() {
-    [1, 2, 3].forEach(calcCompany);
+    const st = estado();
+    document.getElementById('year-rates').innerHTML =
+      `α em ${st.ano}: CBS <strong>${fmtPct(st.al.cbs)}</strong> + IBS <strong>${fmtPct(st.al.ibs)}</strong> = <strong>${fmtPct(st.al.total)}</strong>`;
+    const res = st.empresas.map(e => modelo(paramsDe(st, e)));
+    st.empresas.forEach((e, i) => {
+      renderCard(st, e); renderDetail(st, e, res[i]);
+      document.getElementById('ic-caption-' + e.n).textContent = `IC no ano: ${fmtBRL(res[i].ic)}`;
+    });
+    renderCompare(st, res);
+    renderChart(st);
+    renderSens(st);
   }
 
-  setupMaskedInputs();
-  setupScenarioControls();
-  updateAllPctDas();
+  document.querySelectorAll('input.masked:not([readonly])').forEach(el => {
+    applyMask(el);
+    el.addEventListener('input', () => { applyMask(el); calc(); });
+    el.addEventListener('focus', () => requestAnimationFrame(() => el.select()));
+  });
+  ['ano-ref', 'base-mode', 'anexo1', 'anexo2', 'anexo3'].forEach(id =>
+    document.getElementById(id).addEventListener('change', calc));
+  calc();
 </script>
 
 </body>
